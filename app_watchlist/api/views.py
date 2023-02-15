@@ -2,6 +2,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from app_watchlist.models import Movie
 from app_watchlist.api.serializers import MovieSerializer
+from rest_framework import status
 
 #NOTE: every request requires a request method, 
 # the decorato @api_view provides that for us
@@ -22,6 +23,11 @@ def movie_list(request):
         serializer = MovieSerializer(movies, many=True) # serialized, map all data
         return Response(serializer.data)
     
+        # return Response({
+        #     'message': 'Get Data Successfully',
+        #     'data': serializer.data
+        # })
+    
     if request.method == 'POST':
         # get data from clientside
         
@@ -39,7 +45,11 @@ def movie_list(request):
 # since these methods are using ID, to make the code cleaner, we can just merge it all in one function
 @api_view(['GET', 'PUT', 'DELETE']) 
 def movie_details(request, id):
-    movie = Movie.objects.get(id=id)
+    # try catch to check if id exists
+    try:
+        movie = Movie.objects.get(id=id)
+    except Movie.DoesNotExist:
+        return Response({'error': 'Movie not found'}, status=status.HTTP_404_NOT_FOUND)
     
     if request.method == 'GET':
         serializer = MovieSerializer(movie)
@@ -59,3 +69,4 @@ def movie_details(request, id):
         movie = Movie.objects.get(id=id)
         # this delete is a queryset method, it has nothing to do with serializer 
         movie.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
