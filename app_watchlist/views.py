@@ -17,3 +17,15 @@ def movie_list(request):
     
     return JsonResponse(data) #convert dictionary to json
     
+    
+def movie_details(request, id):
+    movie = Movie.objects.get(id=id)
+    print(movie)
+    
+    data = {
+        'name': movie.name,
+        'description': movie.description,
+        'active': movie.active,
+    }
+    
+    return JsonResponse(data) #convert dictionary to json
