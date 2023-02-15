@@ -1,0 +1,30 @@
+# serializers map all values in a dictionary
+# serializers eliminate the manually creating  a dictionary in the view
+from app_watchlist.models import Movie
+from rest_framework import serializers
+
+class MovieSerializer(serializers.ModelSerializer):
+    # custom field, it is not in the model itself but this create a field in the serializer
+    # the json response will now have a field named len_name
+    # you can use custom fields via creating a get method, get_len_name(self, object)
+    name_len = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = Movie
+        fields = "__all__"
+        
+        # you can define field manually, it can be handy for selecting specific filed and excluduing other
+        # by defining fields, you can implement inline validators
+        # fields = [
+        #     'id',
+        #     'name',
+        #     'description',
+        #     'active'
+        # ]
+    
+    # this return a value for a custom field declared above
+    # note ~ the function name must be 'get_<custom_field_name>(self, obj)'    
+    def get_name_len(self, obj):
+        return len(obj.name)
+  
+    
