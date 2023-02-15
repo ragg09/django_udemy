@@ -16,6 +16,11 @@ from rest_framework import serializers
     the serializer class, or simply use a `Serializer` class.
 """
 class MovieSerializer(serializers.ModelSerializer):
+    # custom field, it is not in the model itself but this create a field in the serializer
+    # the json response will now have a field named len_name
+    # you can use custom fields via creating a get method, get_len_name(self, object)
+    name_len = serializers.SerializerMethodField()
+    
     class Meta:
         model = Movie
         fields = "__all__"
@@ -28,6 +33,11 @@ class MovieSerializer(serializers.ModelSerializer):
         #     'description',
         #     'active'
         # ]
+    
+    # this return a value for a custom field declared above
+    # note ~ the function name must be 'get_<custom_field_name>(self, obj)'    
+    def get_name_len(self, obj):
+        return len(obj.name)
         
     # Field-level validation
     # take note that you are refenrencing a field via using the proper field name you declared
