@@ -19,6 +19,7 @@ class WatchListSerializer(serializers.ModelSerializer):
     class Meta:
         model = WatchList
         fields = "__all__"
+        lookup_field = 'id'
         
         # you can define field manually, it can be handy for selecting specific filed and excluduing other
         # by defining fields, you can implement inline validators
@@ -30,6 +31,25 @@ class WatchListSerializer(serializers.ModelSerializer):
         # ]
         
 class StreamPlatformsSerializer(serializers.ModelSerializer):
+    
+    # NESTED Serializers = Return all fields
+    # since watchlist has a relationship in streamplatform (see in model for reference)
+    # the varaible name here is very crucial, it must be the same to what you declared in the related_name in model
+    # this code allow you to display all movies that is related to this platform
+    # take note that this is a read only field, meaning, 
+    # you dont need to actually pass it in your post request, but it will be visible in the get request
+    watchlist = WatchListSerializer(many=True, read_only=True)
+    
+    
+    # # Serializer Relationships = return only the the string defined in the model
+    # # other than defined field you can actually get just the ID, or a hyperlink
+    # # see documentation for info: https://www.django-rest-framework.org/api-guide/relations/
+    # watchlist = serializers.StringRelatedField(many=True, read_only=True)
+    
+
+    
+    
+    
     class Meta:
         model = StreamPlatforms
         fields = "__all__"
