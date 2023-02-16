@@ -1,8 +1,6 @@
 from django.db import models
 
 # Create your models here.
-
-
 class StreamPlatforms(models.Model):
     name = models.CharField(max_length=30)
     about = models.CharField(max_length=150)
@@ -15,6 +13,9 @@ class WatchList(models.Model):
     storyline = models.CharField(max_length=200)
     active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    
+    # relationship | onet-to-one |watchlist has one streaming platform
+    platform = models.ForeignKey(StreamPlatforms, on_delete=models.CASCADE, related_name="watchlist")
     def __str__(self):
         return self.title
     

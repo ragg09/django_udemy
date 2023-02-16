@@ -76,6 +76,31 @@ class StreamPlatformAV(APIView):
         else:
             return Response(serializer.errors)
         
+class StreamPlaformDetailAV(APIView):
+  
+    def get(self, request, id): 
+        stream = StreamPlatforms.objects.get(id=id)
+        if request.method == 'GET':
+            serializer = StreamPlatformsSerializer(stream)
+            return Response(serializer.data)
+        
+    def put(self, request, id):
+        stream = StreamPlatforms.objects.get(id=id)
+        # take note that we also pass the selected data in the serializer since our update need that instance of the old data
+        serializer = StreamPlatformsSerializer(stream, data=request.data)
+        if serializer.is_valid():
+            # .save() method is called referenced to the update method in the serializer since the request method is PUT
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)
+        
+    def delete(self, request, id):
+        movie = StreamPlatforms.objects.get(id=id)
+        # this delete is a queryset method, it has nothing to do with serializer 
+        StreamPlatforms.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+        
       
 # CLASS-BASED VIEWS ONLY ABOVE =============================================================================================        
 
