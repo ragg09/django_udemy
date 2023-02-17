@@ -1,6 +1,6 @@
 # serializers map all values in a dictionary
 # serializers eliminate the manually creating  a dictionary in the view
-from app_watchlist.models import WatchList, StreamPlatforms, Review
+from app_watchlist.models import WatchList, StreamPlatforms
 from rest_framework import serializers
 
 """
@@ -15,24 +15,11 @@ from rest_framework import serializers
     you need you should either declare the extra/differing fields explicitly on
     the serializer class, or simply use a `Serializer` class.
 """
-class ReviewSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Review
-        fields = "__all__"
-
 class WatchListSerializer(serializers.ModelSerializer):
-    
-    # NESTED Serializers = Return all fields
-    # since watchlist has a relationship in streamplatform (see in model for reference)
-    # the varaible name here is very crucial, it must be the same to what you declared in the related_name in model
-    # this code allow you to display all movies that is related to this platform
-    # take note that this is a read only field, meaning, 
-    # you dont need to actually pass it in your post request, but it will be visible in the get request
-    reviews = ReviewSerializer(many=True, read_only=True)
-    
     class Meta:
         model = WatchList
         fields = "__all__"
+        lookup_field = 'id'
         
         # you can define field manually, it can be handy for selecting specific filed and excluduing other
         # by defining fields, you can implement inline validators
