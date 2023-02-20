@@ -19,6 +19,7 @@ class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
         fields = "__all__"
+        lookup_field = "id"
 
 class WatchListSerializer(serializers.ModelSerializer):
     
