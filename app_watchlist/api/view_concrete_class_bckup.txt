@@ -1,0 +1,16 @@
+# CONCRETE CLASS VIEWS ONLY AHEAD =============================================================================================
+# concret class view is almost the same with mixin, the only difference is that all the methods are already included in generics
+# meaning, you dont need to define them manually
+# just import the methods from generics and it will do the work
+# it is shorter than mixin
+# generic actually uses mixin too, but it is done behind the scenes
+class ReviewList(generics.ListCreateAPIView):
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
+    
+class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
+       
+    
+# CONCRETE CLASS VIEWS ONLY ABOVE =============================================================================================

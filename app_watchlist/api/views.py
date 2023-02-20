@@ -5,48 +5,73 @@ from rest_framework import status
 from rest_framework.views import APIView
 # from rest_framework.decorators import api_view
 
-#for MIXIN
+# #for MIXIN
+# from rest_framework import generics
+# from rest_framework import mixins
+
+#for Concrete View Class
 from rest_framework import generics
-from rest_framework import mixins
 
-# GENERICAPIVIEW AND MIXIN VIEWS ONLY AHEAD =============================================================================================
-# in this example I only used ListModelMixin and CreateModelMixin it is used for retrieving and creating
-# but you can perform entire CRUD using this just see the documentation
-# https://www.django-rest-framework.org/api-guide/generic-views/#mixins
-# note! generics.GenericAPIView must always be the last argument
-class ReviewList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
-    # these two variables are attribute name
-    # meaning, you cant change it to any variable based on the documentation
+# CONCRETE CLASS VIEWS ONLY AHEAD =============================================================================================
+# concret class view is almost the same with mixin, the only difference is that all the methods are already included in generics
+# meaning, you dont need to define them manually
+# just import the methods from generics and it will do the work
+# it is shorter than mixin
+# generic actually uses mixin too, but it is done behind the scenes
+class ReviewList(generics.ListCreateAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
-
-    # this uses the ListModelMixin
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
-
-    # this uses the CreateModelMixin
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
     
-class ReviewDetail(mixins.RetrieveModelMixin, generics.GenericAPIView):
-    # these two variables are attribute name
-    # meaning, you cant change it to any variable based on the documentation
+class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
-
-    # this uses the RetriveModelMixin
-    def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
+       
     
-    # you can add your update and delete methods here
-    #
-    #
+# CONCRETE CLASS VIEWS ONLY ABOVE =============================================================================================
 
 
 
 
 
-# GENERICAPIVIEW AND MIXIN VIEWS ONLY AHEAD =============================================================================================
+
+
+# # GENERICAPIVIEW AND MIXIN VIEWS ONLY AHEAD =============================================================================================
+# # in this example I only used ListModelMixin and CreateModelMixin it is used for retrieving and creating
+# # but you can perform entire CRUD using this just see the documentation
+# # https://www.django-rest-framework.org/api-guide/generic-views/#mixins
+# # note! generics.GenericAPIView must always be the last argument
+# class ReviewList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
+#     # these two variables are attribute name
+#     # meaning, you cant change it to any variable based on the documentation
+#     queryset = Review.objects.all()
+#     serializer_class = ReviewSerializer
+
+#     # this uses the ListModelMixin
+#     def get(self, request, *args, **kwargs):
+#         return self.list(request, *args, **kwargs)
+
+#     # this uses the CreateModelMixin
+#     def post(self, request, *args, **kwargs):
+#         return self.create(request, *args, **kwargs)
+    
+# class ReviewDetail(mixins.RetrieveModelMixin, generics.GenericAPIView):
+#     # these two variables are attribute name
+#     # meaning, you cant change it to any variable based on the documentation
+#     queryset = Review.objects.all()
+#     serializer_class = ReviewSerializer
+
+#     # this uses the RetriveModelMixin
+#     def get(self, request, *args, **kwargs):
+#         return self.retrieve(request, *args, **kwargs)
+    
+#     # you can add your update and delete methods here
+#     #
+#     #
+
+# # GENERICAPIVIEW AND MIXIN VIEWS ONLY ABOVE =============================================================================================
+
+
+# CLASS-BASED VIEWS ONLY AHEAD =============================================================================================
 class WatchListAV(APIView):
     
     def get(self, request):
