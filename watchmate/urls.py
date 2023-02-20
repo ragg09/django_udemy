@@ -20,5 +20,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     
     # urlpatterns from other applications
-    path('watch/', include('app_watchlist.api.urls'))
+    path('watch/', include('app_watchlist.api.urls')),
+    
+    # built in authentication methods, it will be temporary
+    path('api-auth', include('rest_framework.urls'))
+    
 ]
