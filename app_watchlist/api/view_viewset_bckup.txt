@@ -1,0 +1,32 @@
+# VIEWSET ONLY AHEAD =============================================================================================
+
+class StreamPlatformVS(viewsets.ViewSet):
+    """
+    This viewset automatically provides `list` and `retrieve` actions.
+    """
+    queryset = StreamPlatforms.objects.all()
+    serializer_class = StreamPlatformsSerializer    
+    
+    def list(self, request):
+        queryset = StreamPlatforms.objects.all()
+        serializer = StreamPlatformsSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, pk=None):
+        queryset = StreamPlatforms.objects.all()
+        watchlist = get_object_or_404(queryset, pk=pk)
+        serializer = StreamPlatformsSerializer(watchlist)
+        return Response(serializer.data)
+    
+    def create(self, request):
+        serializer = WatchListSerializer(data=request.data)
+        # validator
+        if serializer.is_valid():
+            # .save() method is called referenced to the create method in the serializer since the request method is POST
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)
+    
+
+# VIEWSET ONLY ABOVE =============================================================================================
