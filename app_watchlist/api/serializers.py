@@ -18,8 +18,8 @@ from rest_framework import serializers
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
-        fields = "__all__"
-        lookup_field = "id"
+        exclude = ('watchlist',)
+        # fields = "__all__"
 
 class WatchListSerializer(serializers.ModelSerializer):
     

@@ -18,9 +18,36 @@ from rest_framework import generics
 # just import the methods from generics and it will do the work
 # it is shorter than mixin
 # generic actually uses mixin too, but it is done behind the scenes
-class ReviewList(generics.ListCreateAPIView):
-    queryset = Review.objects.all()
+
+# non-overwritten queryset
+# class ReviewList(generics.ListCreateAPIView):
+#     queryset = Review.objects.all()
+#     serializer_class = ReviewSerializer
+
+# queryset overwrite
+class ReviewList(generics.ListAPIView):
     serializer_class = ReviewSerializer
+    
+    def get_queryset(self):
+        pk = self.kwargs['pk']
+        return Review.objects.filter(watchlist=pk)
+    
+class ReviewCreate(generics.CreateAPIView):
+    # queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
+    
+    # since the url uses the watchlist ID, by creating this one, we will save the hassle of sending watchlist ID to the review
+    # another thing about this, since we are now selecting directly the ID of watchlist, we dont need it to the request
+    # it will be a conflict since in review, we require that ID,
+    # to solve that, in the serialize, instead of using fields = "__all__", just use exclude('field_name',)
+    def perform_create(self, serializer):
+        pk = self.kwargs.get('pk')
+        movie = WatchList.objects.get(pk=pk)
+        
+        # you can add logic here before saving the data
+        
+        serializer.save(watchlist=movie)
+
     
 class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Review.objects.all()
