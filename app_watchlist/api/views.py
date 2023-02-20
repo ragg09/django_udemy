@@ -12,6 +12,10 @@ from rest_framework.views import APIView
 #for Concrete View Class
 from rest_framework import generics
 
+#for viewset
+from rest_framework import viewsets
+from django.shortcuts import get_object_or_404
+
 # CONCRETE CLASS VIEWS ONLY AHEAD =============================================================================================
 # concret class view is almost the same with mixin, the only difference is that all the methods are already included in generics
 # meaning, you dont need to define them manually
@@ -97,6 +101,29 @@ class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
 
 # # GENERICAPIVIEW AND MIXIN VIEWS ONLY ABOVE =============================================================================================
 
+# VIEWSET ONLY AHEAD =============================================================================================
+
+class StreamPlatformVS(viewsets.ViewSet):
+    """
+    This viewset automatically provides `list` and `retrieve` actions.
+    """
+    queryset = StreamPlatforms.objects.all()
+    serializer_class = StreamPlatformsSerializer    
+    
+    def list(self, request):
+        queryset = StreamPlatforms.objects.all()
+        serializer = StreamPlatformsSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, pk=None):
+        queryset = StreamPlatforms.objects.all()
+        watchlist = get_object_or_404(queryset, pk=pk)
+        serializer = StreamPlatformsSerializer(watchlist)
+        return Response(serializer.data)
+    
+
+# VIEWSET ONLY ABOVE =============================================================================================
+
 
 # CLASS-BASED VIEWS ONLY AHEAD =============================================================================================
 class WatchListAV(APIView):
@@ -149,8 +176,6 @@ class WatchListDetailAV(APIView):
         # this delete is a queryset method, it has nothing to do with serializer 
         WatchList.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-    
-    
     
 class StreamPlatformAV(APIView):
     

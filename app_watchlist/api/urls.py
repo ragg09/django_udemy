@@ -2,6 +2,7 @@ from django.urls import path, include
 # from app_watchlist.api.views import movie_list, movie_details
 from app_watchlist.api.views import (
     WatchListAV, WatchListDetailAV, 
+    StreamPlatformVS,
     StreamPlatformAV, 
     StreamPlaformDetailAV, 
     ReviewCreate,
@@ -9,6 +10,10 @@ from app_watchlist.api.views import (
     ReviewDetail
 )
 
+from rest_framework.routers import DefaultRouter
+
+router = DefaultRouter()
+router.register('stream', StreamPlatformVS, basename='streamplatform')
  
 urlpatterns = [
     # function-based urlpatterns
@@ -18,8 +23,12 @@ urlpatterns = [
     #class-based urlpatterns
     path('list/', WatchListAV.as_view(), name="movie-list"),
     path('<int:id>', WatchListDetailAV.as_view(), name="movie-details"),
-    path('stream/', StreamPlatformAV.as_view(), name="stream"),
-    path('stream/<int:id>', StreamPlaformDetailAV.as_view(), name="stream-details"),
+    
+    path('', include(router.urls)),
+    
+    # commented due to router lesson
+    # path('stream/', StreamPlatformAV.as_view(), name="stream"),
+    # path('stream/<int:id>', StreamPlaformDetailAV.as_view(), name="stream-details"),
     
     
     # get all reviews for specific movie
