@@ -16,6 +16,7 @@ from rest_framework import serializers
     the serializer class, or simply use a `Serializer` class.
 """
 class ReviewSerializer(serializers.ModelSerializer):
+    review_user = serializers.StringRelatedField(read_only=True)
     class Meta:
         model = Review
         exclude = ('watchlist',)
