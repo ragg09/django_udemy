@@ -22,7 +22,7 @@ urlpatterns = [
     
     #class-based urlpatterns
     path('list/', WatchListAV.as_view(), name="movie-list"),
-    path('<int:id>', WatchListDetailAV.as_view(), name="movie-details"),
+    path('<int:id>/', WatchListDetailAV.as_view(), name="movie-details"),
     
     path('', include(router.urls)),
     
@@ -32,11 +32,11 @@ urlpatterns = [
     
     
     # get all reviews for specific movie
-    path('stream/<int:pk>/review-create', ReviewCreate.as_view(), name="stream-review-create"),
+    path('<int:pk>/review-create/', ReviewCreate.as_view(), name="stream-review-create"),
     # get all reviews for specific movie
-    path('stream/<int:pk>/review', ReviewList.as_view(), name="stream-reviews"),
+    path('<int:pk>/reviews/', ReviewList.as_view(), name="stream-reviews"),
     # get specific review for specific movie
-    path('stream/review/<int:pk>', ReviewDetail.as_view(), name="stream-reviews-detail"),
+    path('review/<int:pk>/', ReviewDetail.as_view(), name="stream-reviews-detail"),
     
     # path('review/', ReviewList.as_view(), name="review-list"),
     # #take note this, I used PK since we are using mixin, and by default, ID is PK

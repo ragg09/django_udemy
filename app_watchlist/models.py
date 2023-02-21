@@ -16,6 +16,8 @@ class WatchList(models.Model):
     title = models.CharField(max_length=50)
     storyline = models.CharField(max_length=200)
     active = models.BooleanField(default=True)
+    avg_rating = models.FloatField(default=0)
+    number_rating = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     
     # relationship | onet-to-one | watchlist has one streaming platform

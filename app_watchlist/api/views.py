@@ -82,6 +82,19 @@ class ReviewCreate(generics.CreateAPIView):
         if review_queryset.exists():
             raise ValidationError("You already submit review for this movie")
         
+        # simple custom calculation for rating
+        if watchlist.number_rating == 0:
+            watchlist.avg_rating = serializer.validated_data['rating']
+        else:
+            watchlist.avg_rating = (watchlist.avg_rating + serializer.validated_data['rating']) / 2
+        watchlist.number_rating += 1
+        watchlist.save()
+        
+        
+        # ## 
+        # you can add logic here above saving the data
+        
+            
         serializer.save(watchlist=watchlist, review_user=review_user)
 
     
@@ -93,7 +106,7 @@ class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
     # # if not, read only
     # permission_classes = [AdminOrReadOnlyPermissions]
     
-    # the permissions used here is custom, it checks if the user is admin actions are allowed
+    # the permissions used here is custom, it checks if the user is the reviewer, is so, actions are allowed
     # if not, read only
     permission_classes = [ReviewUserOrReadOnlyPermission]
        
