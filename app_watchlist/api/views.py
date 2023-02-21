@@ -20,6 +20,9 @@ from django.shortcuts import get_object_or_404
 # this import is used for permissions
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 
+# this import is used for custom permissions
+from app_watchlist.api.permissions import AdminOrReadOnlyPermissions, ReviewUserOrReadOnlyPermission
+
 # CONCRETE CLASS VIEWS ONLY AHEAD =============================================================================================
 # concret class view is almost the same with mixin, the only difference is that all the methods are already included in generics
 # meaning, you dont need to define them manually
@@ -85,12 +88,14 @@ class ReviewCreate(generics.CreateAPIView):
 class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
-    # object level permissions
-    # this will serve as an middleware for authenticating users
-    # it allows aunthenticated user to do actions, while the guest is for readonly access
-    # it is built in in DRF, see in the documentation
-    # https://www.django-rest-framework.org/api-guide/permissions/#permissions
-    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    # # the permissions used here is custom, it checks if the user is admin actions are allowed
+    # # if not, read only
+    # permission_classes = [AdminOrReadOnlyPermissions]
+    
+    # the permissions used here is custom, it checks if the user is admin actions are allowed
+    # if not, read only
+    permission_classes = [ReviewUserOrReadOnlyPermission]
        
     
 # CONCRETE CLASS VIEWS ONLY ABOVE =============================================================================================
