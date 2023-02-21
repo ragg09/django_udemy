@@ -38,9 +38,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
+    # DRF
     'rest_framework',
     
+    # application
     'app_watchlist',
+    'app_user',
+    
+    # Token Authentication
+    'rest_framework.authtoken',
     
 ]
 
@@ -140,7 +146,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # to test the authentication, use postman and in the headers, Authorization Basic username:password
 # or you can simply use the django brwosable authentication
 REST_FRAMEWORK = {
+    # 'DEFAULT_AUTHENTICATION_CLASSES': [
+    #     'rest_framework.authentication.BasicAuthentication',
+    # ]
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
     ]
 }

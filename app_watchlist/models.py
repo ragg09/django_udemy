@@ -24,7 +24,7 @@ class WatchList(models.Model):
     # the related_name must be used in the serializer as the variable name for the relationship
     platform = models.ForeignKey(StreamPlatforms, on_delete=models.CASCADE, related_name="watchlist")
     def __str__(self):
-        return self.title
+        return str(self.id)+ " | " + self.title 
     
 class Review(models.Model):
     review_user = models.ForeignKey(User, on_delete=models.CASCADE)

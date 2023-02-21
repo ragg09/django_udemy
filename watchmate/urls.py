@@ -21,6 +21,7 @@ urlpatterns = [
     
     # urlpatterns from other applications
     path('watch/', include('app_watchlist.api.urls')),
+    path('account/', include('app_user.api.urls')),
     
     # built in authentication methods, it will be temporary
     # commented out since, I will work with postman now
