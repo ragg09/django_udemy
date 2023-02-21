@@ -10,12 +10,15 @@ from rest_framework.views import APIView
 # from rest_framework import generics
 # from rest_framework import mixins
 
-#for Concrete View Class
+# for Concrete View Class
 from rest_framework import generics
 
-#for viewset
+# for viewset
 from rest_framework import viewsets
 from django.shortcuts import get_object_or_404
+
+# this import is used for permissions
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 
 # CONCRETE CLASS VIEWS ONLY AHEAD =============================================================================================
 # concret class view is almost the same with mixin, the only difference is that all the methods are already included in generics
@@ -33,6 +36,12 @@ from django.shortcuts import get_object_or_404
 class ReviewList(generics.ListAPIView):
     serializer_class = ReviewSerializer
     
+    # object level permissions
+    # this will serve as an middleware for authenticating users
+    # it is built in in DRF, see in the documentation
+    # https://www.django-rest-framework.org/api-guide/permissions/#permissions
+    permission_classes = [IsAuthenticated]
+    
     def get_queryset(self):
         pk = self.kwargs['pk']
         return Review.objects.filter(watchlist=pk)
@@ -40,6 +49,12 @@ class ReviewList(generics.ListAPIView):
 class ReviewCreate(generics.CreateAPIView):
     # queryset = Review.objects.all()
     serializer_class = ReviewSerializer
+    
+    # object level per
+    # this will serve as an middleware for authenticating users
+    # it is built in in DRF, see in the documentation
+    # https://www.django-rest-framework.org/api-guide/permissions/#permissions
+    permission_classes = [IsAuthenticated]
     
     
     def get_queryset(self):
@@ -59,6 +74,7 @@ class ReviewCreate(generics.CreateAPIView):
         # block of codes is a sample validator,
         # it browse the data if the user already has a review to a specific item
         review_user = self.request.user
+        #filter args, 1 is the item to be browsed of, 2 is the item looking for
         review_queryset = Review.objects.filter(watchlist = watchlist, review_user = review_user)
         if review_queryset.exists():
             raise ValidationError("You already submit review for this movie")
@@ -69,6 +85,12 @@ class ReviewCreate(generics.CreateAPIView):
 class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
+    # object level permissions
+    # this will serve as an middleware for authenticating users
+    # it allows aunthenticated user to do actions, while the guest is for readonly access
+    # it is built in in DRF, see in the documentation
+    # https://www.django-rest-framework.org/api-guide/permissions/#permissions
+    permission_classes = [IsAuthenticatedOrReadOnly]
        
     
 # CONCRETE CLASS VIEWS ONLY ABOVE =============================================================================================
