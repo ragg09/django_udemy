@@ -23,6 +23,7 @@ urlpatterns = [
     path('watch/', include('app_watchlist.api.urls')),
     
     # built in authentication methods, it will be temporary
-    path('api-auth', include('rest_framework.urls'))
+    # commented out since, I will work with postman now
+    # path('api-auth', include('rest_framework.urls'))
     
 ]
