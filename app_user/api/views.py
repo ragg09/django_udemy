@@ -30,5 +30,6 @@ def registration_view(request):
 @api_view(['POST'])
 def logout_view(request):
     if request.method == 'POST':
+        # just simply delete token 
         request.user.auth_token.delete()
         return Response(status = status.HTTP_200_OK)
