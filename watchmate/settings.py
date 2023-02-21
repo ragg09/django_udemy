@@ -150,6 +150,38 @@ REST_FRAMEWORK = {
     #     'rest_framework.authentication.BasicAuthentication',
     # ]
     'DEFAULT_AUTHENTICATION_CLASSES': [
+        
+        # this is usually for testing purposes
+        # 'rest_framework.authentication.BasicAuthentication',
+        
+    #    """
+    #    Both Token Authentication and JWT Authentication is good
+    #    but there are also disadvantages
+       
+    #    for token authentication, it requires 2 requests to make actions
+    #    since token needs to be verified in the database
+       
+    #    for JWT authentication, there is no way you can revoke a token
+    #    and it carries user information, it is faster since it doesnt 
+    #    require database saving and verification. On the brighter side,
+    #    token is saved on local storage, so you can just delete the cache
+    #    """
+
+        
+        # it can be used as is for project development
+        # no other packages required
         'rest_framework.authentication.TokenAuthentication',
-    ]
+        
+        # JWT Package
+        # # https://jwt.io/
+        # # see https://django-rest-framework-simplejwt.readthedocs.io/en/latest/
+        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
+        
+    ],
 }
+
+# # overwrtie JWT settings
+# # this is actually optional
+# SIMPLE_JWT = {
+#     'ROTATE_REFRESH_TOKENS': True,
+# }
