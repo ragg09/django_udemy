@@ -2,7 +2,7 @@
 
 from rest_framework import permissions
 
-class AdminOrReadOnlyPermissions(permissions.IsAdminUser):
+class IsAdminOrReadOnlyPermissions(permissions.IsAdminUser):
     
     def has_permission(self, request, view):
         #condition permission
@@ -15,7 +15,7 @@ class AdminOrReadOnlyPermissions(permissions.IsAdminUser):
         else:
            return bool(request.user and request.user.is_staff)
     
-class ReviewUserOrReadOnlyPermission(permissions.BasePermission):
+class IsReviewUserOrReadOnlyPermission(permissions.BasePermission):
     
     def has_object_permission(self, request, view, obj):
         # safe method means READ_ONLY, unsafe can do CRUD operations

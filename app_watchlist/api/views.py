@@ -21,7 +21,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 
 # this import is used for custom permissions
-from app_watchlist.api.permissions import AdminOrReadOnlyPermissions, ReviewUserOrReadOnlyPermission
+from app_watchlist.api.permissions import IsAdminOrReadOnlyPermissions, IsReviewUserOrReadOnlyPermission
 
 # CONCRETE CLASS VIEWS ONLY AHEAD =============================================================================================
 # concret class view is almost the same with mixin, the only difference is that all the methods are already included in generics
@@ -39,11 +39,11 @@ from app_watchlist.api.permissions import AdminOrReadOnlyPermissions, ReviewUser
 class ReviewList(generics.ListAPIView):
     serializer_class = ReviewSerializer
     
-    # object level permissions
-    # this will serve as an middleware for authenticating users
-    # it is built in in DRF, see in the documentation
-    # https://www.django-rest-framework.org/api-guide/permissions/#permissions
-    permission_classes = [IsAuthenticated]
+    # # object level permissions
+    # # this will serve as an middleware for authenticating users
+    # # it is built in in DRF, see in the documentation
+    # # https://www.django-rest-framework.org/api-guide/permissions/#permissions
+    # permission_classes = [IsAuthenticated]
     
     def get_queryset(self):
         pk = self.kwargs['pk']
@@ -104,11 +104,11 @@ class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
 
     # # the permissions used here is custom, it checks if the user is admin actions are allowed
     # # if not, read only
-    # permission_classes = [AdminOrReadOnlyPermissions]
+    # permission_classes = [IsAdminOrReadOnlyPermissions]
     
     # the permissions used here is custom, it checks if the user is the reviewer, is so, actions are allowed
     # if not, read only
-    permission_classes = [ReviewUserOrReadOnlyPermission]
+    permission_classes = [IsReviewUserOrReadOnlyPermission]
        
     
 # CONCRETE CLASS VIEWS ONLY ABOVE =============================================================================================
@@ -161,6 +161,7 @@ class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
 class StreamPlatformVS(viewsets.ModelViewSet):
     queryset = StreamPlatforms.objects.all()
     serializer_class = StreamPlatformsSerializer
+    permission_classes = [IsAdminOrReadOnlyPermissions]
 
 
 # MODELVIEWSET ONLY ABOVE =============================================================================================
@@ -202,6 +203,7 @@ class StreamPlatformVS(viewsets.ModelViewSet):
 
 # CLASS-BASED VIEWS ONLY AHEAD =============================================================================================
 class WatchListAV(APIView):
+    permission_classes = [IsAdminOrReadOnlyPermissions]
     
     def get(self, request):
         movies = WatchList.objects.all() # get complex data
@@ -228,6 +230,8 @@ class WatchListDetailAV(APIView):
     #     except WatchList.DoesNotExist:
     #         return Response({'error': 'Movie not found'}, status=status.HTTP_404_NOT_FOUND)    
     
+    permission_classes = [IsAdminOrReadOnlyPermissions]
+    
     def get(self, request, id): 
         # self.validate_request(self, id=id)
         movie = WatchList.objects.get(id=id)
@@ -253,6 +257,7 @@ class WatchListDetailAV(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
     
 class StreamPlatformAV(APIView):
+    permission_classes = [IsAdminOrReadOnlyPermissions]
     
     def get(self, request):
         platform = StreamPlatforms.objects.all()
@@ -268,6 +273,7 @@ class StreamPlatformAV(APIView):
             return Response(serializer.errors)
         
 class StreamPlaformDetailAV(APIView):
+    permission_classes = [IsAdminOrReadOnlyPermissions]
   
     def get(self, request, id): 
         stream = StreamPlatforms.objects.get(id=id)
